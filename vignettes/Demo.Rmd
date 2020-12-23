@@ -1,0 +1,43 @@
+---
+title: "Demo"
+author: "Daniel"
+date: "12/23/2020"
+output: html_document
+---
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(magrittr)
+library(purrr)
+
+library(ggplot2)
+library(cowplot)
+devtools::load_all()
+```
+
+```{r}
+set.seed(834759847)
+plts <- map(1:8, function(i){
+  iter <- sample(4:7, 1)
+  
+  d = runif(iter, 0, 90) # Direction Changes
+  m = runif(iter, 1, 10)# Magnitudes, length of branch
+  r = runif(iter, 0, .1) # Regressions in branch point
+
+  plt <- Display(tree = Grow(
+    startx = 0, 
+    starty = 10, 
+    d[order(d, decreasing = T)],
+    m[order(m, decreasing = T)],
+    r[order(r, decreasing = T)] ),
+    reflections = sample(3:8, 1),
+    linecolor = sample(c("#9ECAE1", "#6BAED6", "#4292C6", "#2171B5", "#084594"), 1))
+  return(plt)
+})
+cowplot::plot_grid(plotlist = plts, nrow = 2)
+```
